@@ -1,6 +1,6 @@
 {
-  "name": "delete-test-01",
-  "description": "delete-test-01-description",
+  "name": "aws-lambda-sns-poc",
+  "description": "aws-lambda-sns-poc",
   "version": "0.0.1",
   "private": true,
   "devDependencies": {

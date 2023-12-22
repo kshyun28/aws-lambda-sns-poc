@@ -19,7 +19,7 @@ Resources:
       TopicName: SnsTopicEmailAlert
       DisplayName: SnsTopicEmailAlert
       Subscription:
-        - Endpoint: jasper.d.gabriel@gmail.com
+        - Endpoint: sample@email.com
           Protocol: email
 
   # Each Lambda function is defined by properties:
