@@ -1,0 +1,14 @@
+{
+  "name": "delete-test-01",
+  "description": "delete-test-01-description",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "jest": "^29.2.1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sns": "^3.478.0",
+    "esbuild": "^0.19.10"
+  }
+}

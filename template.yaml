@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  aws-lambda-sns-poc
+Transform:
+  - AWS::Serverless-2016-10-31
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    LoggingConfig:
+      LogFormat: JSON
+
+# Resources declares the AWS resources that you want to include in the stack
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
+Resources:
+  SnsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: SnsTopicEmailAlert
+      DisplayName: SnsTopicEmailAlert
+      Subscription:
+        - Endpoint: jasper.d.gabriel@gmail.com
+          Protocol: email
+
+  # Each Lambda function is defined by properties:
+  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+
+  # This is a Lambda function config associated with the source code: app.ts
+  LambdaToSnsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-LambdaToSns
+      Handler: src/app.handler
+      Runtime: nodejs20.x
+      Architectures:
+        - arm64
+      MemorySize: 128
+      Timeout: 30
+      Description: A Lambda function that sends a message to an SNS topic.
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /
+            Method: POST
+      Environment:
+        Variables:
+          SNS_TOPIC_ARN: !Ref SnsTopic
+    Connectors:
+      SnsTopicConnector:
+        Properties:
+          Destination:
+            Id: SnsTopic
+          Permissions:
+            - Write
+
+    Metadata: # Manage esbuild properties
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        EntryPoints:
+          - src/app.ts
+        External: # Define external dependencies
+          - "@aws-sdk/*"
+
+Outputs:
+  WebEndpoint:
+    Description: API Gateway endpoint URL for Prod stage
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
