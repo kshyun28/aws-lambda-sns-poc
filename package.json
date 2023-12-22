@@ -10,5 +10,6 @@
   "dependencies": {
     "@aws-sdk/client-sns": "^3.478.0",
     "esbuild": "^0.19.10"
-  }
+  },
+  "license": "MIT"
 }
